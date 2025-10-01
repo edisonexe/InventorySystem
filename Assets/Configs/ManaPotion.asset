@@ -15,6 +15,6 @@ MonoBehaviour:
   _name: Mana potion
   _description: Restores 30 mana points.
   _icon: {fileID: 21300000, guid: 3b7d331531bfc7946a7cba55d22c2f96, type: 3}
-  _type: 2
+  _type: 1
   _stackable: 1
   _maxStackCount: 20

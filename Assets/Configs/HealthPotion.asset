@@ -15,6 +15,6 @@ MonoBehaviour:
   _name: Health potion
   _description: Restores 50 health points.
   _icon: {fileID: 21300000, guid: decd31f00a432cc4a8ed326826111f72, type: 3}
-  _type: 2
+  _type: 1
   _stackable: 1
   _maxStackCount: 20
