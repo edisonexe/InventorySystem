@@ -57,18 +57,5 @@ namespace Core
         public void HideDragIcon() => _dragIcon.Hide();
         
         public void PlayUseFeedback(int index) { }
-
-        public void DebugFillDemoItems()
-        {
-            var m = _controller.Model;
-            m.Set(0, new InventoryItem (_demoWeapon1, 1));
-            m.Set(1, new InventoryItem (_demoWeapon2, 10));
-            m.Set(2, new InventoryItem (_demoPotion1, 10));
-            m.Set(3, new InventoryItem (_demoPotion2, 10));
-            m.Set(4, new InventoryItem (_demoPotion2, 10));
-            m.Set(5, new InventoryItem (_demoWeapon2, 10));
-            m.Set(6, new InventoryItem (_demoPotion1, 10));
-            m.Set(7, new InventoryItem (_demoPotion1, 20));
-        }
     }
 }

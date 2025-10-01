@@ -44,7 +44,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b54bc2772c6483c90c6e5f6d36f2c95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _width: 5
-  _height: 4
   _gridView: {fileID: 0}
+  _spawnPool:
+  - {fileID: 11400000, guid: b82c3f9b19a69704c8dbece51a1fb207, type: 2}
+  - {fileID: 11400000, guid: c14cd851429d2a645b7d56d2bbb4dfa3, type: 2}
+  - {fileID: 11400000, guid: b77e02dac80611044bee53b4f1702175, type: 2}
+  - {fileID: 11400000, guid: e6bf916883c5226418d1679cd56365ae, type: 2}
+  - {fileID: 11400000, guid: b048d93ae9043f14c8a98ef1a4005097, type: 2}
+  _randomItems: 12
+  _maxInitialStack: 20
   draggingFrom: -1
