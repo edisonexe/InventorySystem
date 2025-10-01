@@ -3,7 +3,7 @@ namespace Core
     public enum ItemType
     {
         Weapon,
-        Poison,
+        Potion,
         QuestItem
     }
 }

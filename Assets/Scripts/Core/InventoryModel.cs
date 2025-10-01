@@ -60,7 +60,6 @@ namespace Core
             var dst = Get(to);
             if (src.IsEmpty) return false;
 
-
             if (dst.IsEmpty)
             {
                 Set(to, src);
@@ -77,10 +76,33 @@ namespace Core
                 Set(from, remainder > 0 ? new InventoryItem(src.Config, remainder) : InventoryItem.Empty);
                 return true;
             }
-            
             return false;
         }
 
+        public void TryMergeInternal(InventoryItem dragging, int targetIndex)
+        {
+            var dst = Get(targetIndex);
+            if (dst.IsEmpty || dst.Config != dragging.Config || !dst.Stackable) return;
+
+            int total = dragging.Count + dst.Count;
+            int canPlace = Math.Min(dst.MaxStack, total);
+            int remainder = total - canPlace;
+
+            Set(targetIndex, new InventoryItem(dst.Config, canPlace));
+
+            if (remainder > 0)
+            {
+                for (int i = 0; i < SlotCount; i++)
+                {
+                    if (Get(i).IsEmpty)
+                    {
+                        Set(i, new InventoryItem(dragging.Config, remainder));
+                        return;
+                    }
+                }
+            }
+        }
+        
         public bool UseAt(int index)
         {
             var it = Get(index);
@@ -95,10 +117,8 @@ namespace Core
             {
                 Set(index, InventoryItem.Empty);
             }
-
             return true;
         }
-
         
         public void RemoveAt(int index) => Set(index, InventoryItem.Empty);
     }
