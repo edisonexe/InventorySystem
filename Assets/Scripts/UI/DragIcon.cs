@@ -14,6 +14,7 @@ namespace UI
 
         public void Show(InventoryItem item)
         {
+            gameObject.SetActive(true); 
             _root.SetActive(true);
             _icon.sprite = item.Config.Icon;
         }
