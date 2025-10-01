@@ -59,5 +59,10 @@ namespace Core.Input
         {
             if (_grid.Tooltip != null) _grid.Tooltip.Hide();
         }
+        
+        public void OnClickDelete()
+        {
+            _grid.Controller.DropAt(Index);
+        }
     }
 }

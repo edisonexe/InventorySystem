@@ -10,7 +10,8 @@ namespace UI
         [SerializeField] private Image _icon;
         [SerializeField] private GameObject _countRoot;
         [SerializeField] private TMP_Text _countText;
-
+        [SerializeField] private Button _deleteButton;
+        
         public int Index { get; private set; }
 
         public void Bind(int index)
