@@ -14,7 +14,7 @@ namespace Core.Input
         private InventoryGrid _grid;
 
         private float _lastClickTime;
-        private const float _doubleClickThreshold = 0.25f;
+        private const float DOUBLE_CLICK_THRESHOLD = 0.25f;
 
         private InventoryController Controller => _grid.Controller;
 
@@ -26,7 +26,7 @@ namespace Core.Input
         
         public void OnPointerDown(PointerEventData e)
         {
-            if (Time.unscaledTime - _lastClickTime < _doubleClickThreshold)
+            if (Time.unscaledTime - _lastClickTime < DOUBLE_CLICK_THRESHOLD)
             {
                 Controller.UseAt(_view.Index);
                 _lastClickTime = 0f;
@@ -62,7 +62,7 @@ namespace Core.Input
         
         public void OnClickDelete()
         {
-            _grid.Controller.DropAt(Index);
+            Controller.DropAt(_view.Index);
         }
     }
 }

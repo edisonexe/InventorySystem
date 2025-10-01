@@ -33,7 +33,7 @@ namespace Core
             for (int i = 0; i < count; i++)
             {
                 var view = Instantiate(_slotPrefab, _grid.transform);
-                view.Bind(i);
+                view.Bind(this, i);
                 _views[i] = view;
                 
                 var input = view.GetComponent<SlotInput>();

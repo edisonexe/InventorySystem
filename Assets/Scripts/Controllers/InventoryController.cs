@@ -5,11 +5,10 @@ namespace Controllers
 {
     public class InventoryController : MonoBehaviour
     {
-        [Header("GridSize")]
-        [SerializeField] private int _width = 5;
-        [SerializeField] private int _height = 4;
-
         [SerializeField] private InventoryGrid _gridView;
+        
+        private int _width = 5;
+        private int _height = 4;
         public InventoryModel Model {get; private set;}
         
         public int draggingFrom = -1;

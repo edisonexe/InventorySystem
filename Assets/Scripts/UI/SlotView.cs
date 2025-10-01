@@ -12,10 +12,12 @@ namespace UI
         [SerializeField] private TMP_Text _countText;
         [SerializeField] private Button _deleteButton;
         
+        private InventoryGrid _grid;
         public int Index { get; private set; }
 
-        public void Bind(int index)
+        public void Bind(InventoryGrid grid, int index)
         {
+            _grid = grid;
             Index = index;
             Render(InventoryItem.Empty);
         }
@@ -35,6 +37,9 @@ namespace UI
             {
                 _countRoot.SetActive(false);
                 _icon.sprite = null;
+                
+                if (_grid != null && _grid.Tooltip != null)
+                    _grid.Tooltip.Hide();
             }
         }
     }
