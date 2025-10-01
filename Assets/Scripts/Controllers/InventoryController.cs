@@ -1,5 +1,4 @@
 ﻿using Core;
-using Script.Core;
 using UnityEngine;
 
 namespace Controllers

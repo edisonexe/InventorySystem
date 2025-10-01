@@ -1,11 +1,10 @@
 ﻿using Controllers;
-using Core;
 using Core.Input;
 using UI;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Script.Core
+namespace Core
 {
     public class InventoryGrid : MonoBehaviour
     {
