@@ -15,6 +15,9 @@ namespace Controllers
         
         [SerializeField] private int _width = 5;
         [SerializeField] private int _height = 4;
+        
+        [SerializeField] private int _maxPlacementAttempts = 10;
+        
         private System.Random _rng;
         private InventoryItem _draggingItem;
         public InventoryModel Model {get; private set;}
@@ -39,7 +42,6 @@ namespace Controllers
             if (item.IsEmpty) return;
             draggingFrom = index;
             _draggingItem = item;
-            Model.Set(index, InventoryItem.Empty);
             _gridView.ShowDragIcon(item);
         }
         
@@ -49,42 +51,35 @@ namespace Controllers
             
             if (targetIndex == draggingFrom)
             {
-                Model.Set(draggingFrom, _draggingItem);
                 EndDrag();
                 return;
             }
 
             var target = Model.Get(targetIndex);
+            var src = Model.Get(draggingFrom);
 
             if (target.IsEmpty)
             {
-                Model.Set(targetIndex, _draggingItem);
+                Model.Set(targetIndex, src);
+                Model.Set(draggingFrom, InventoryItem.Empty);   
                 EndDrag();
                 return;
             }
             
             if (target.Config == _draggingItem.Config && target.Stackable)
             {
-                Model.TryMergeInternal(_draggingItem, targetIndex);
+                Model.TryMerge(draggingFrom, targetIndex);
                 EndDrag();
                 return;
             }
 
-            var tmp = target;
-            Model.Set(targetIndex, _draggingItem);
-            Model.Set(draggingFrom, tmp);
-
+            Model.Set(targetIndex, src);
+            Model.Set(draggingFrom, target);
+            
             EndDrag();
         }
 
-        public void CancelDrag()
-        {
-            if (draggingFrom >= 0 && !_draggingItem.IsEmpty)
-            {
-                Model.TryAddAt(draggingFrom, _draggingItem);
-            }
-            EndDrag();
-        }
+        public void CancelDrag() => EndDrag();
 
         public void UseAt(int index)
         {
@@ -107,7 +102,7 @@ namespace Controllers
 
             int placed = 0;
             int attempts = 0;
-            int maxAttempts = _randomItems * 10;
+            int maxAttempts = _randomItems * _maxPlacementAttempts;
 
             while (placed < _randomItems && attempts++ < maxAttempts)
             {

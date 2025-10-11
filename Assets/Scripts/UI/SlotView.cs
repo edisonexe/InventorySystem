@@ -11,7 +11,8 @@ namespace UI
         [SerializeField] private GameObject _countRoot;
         [SerializeField] private TMP_Text _countText;
         [SerializeField] private Button _deleteButton;
-        
+
+        private int _minCountForShow = 1;
         private InventoryGrid _grid;
         public int Index { get; private set; }
 
@@ -29,7 +30,7 @@ namespace UI
             if (has)
             {
                 _icon.sprite = item.Config.Icon;
-                bool showCount = item.Stackable && item.Count > 1;
+                bool showCount = item.Stackable && item.Count > _minCountForShow;
                 _countRoot.SetActive(showCount);
                 if (showCount) _countText.text = item.Count.ToString();
             }

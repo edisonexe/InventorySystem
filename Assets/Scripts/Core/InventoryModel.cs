@@ -15,92 +15,68 @@ namespace Core
         }
         
         public int SlotCount => _slots.Length;
-        public InventoryItem Get(int index) => _slots[index];
+        
+        public InventoryItem Get(int index)
+        {
+            ValidateIndex(index);
+            return _slots[index];
+        }
         
         public void Set(int index, InventoryItem item)
         {
+            ValidateIndex(index);
             _slots[index] = item;
             OnSlotChanged?.Invoke(index);
         }
         
-        public bool TryAddAt(int index, InventoryItem item)
+        public void RemoveAt(int index)
         {
-            var dst = Get(index);
-            if (dst.IsEmpty)
-            {
-                Set(index, item);
-                return true;
-            }
-            
-            if (!dst.IsEmpty && dst.Config == item.Config && dst.Stackable)
-            {
-                int total = dst.Count + item.Count;
-                int canPlace = Math.Min(dst.MaxStack, total);
-                int remainder = total - canPlace;
-                Set(index, new InventoryItem(dst.Config, canPlace));
-                return remainder == 0;
-            }
-            return false;
+            ValidateIndex(index);
+            Set(index, InventoryItem.Empty);
         }
-        
-        public void Swap(int a, int b)
-        {
-            if (a == b) return;
-            var tmp = _slots[a];
-            _slots[a] = _slots[b];
-            _slots[b] = tmp;
-            OnSlotChanged?.Invoke(a);
-            OnSlotChanged?.Invoke(b);
-        }
-        
+
         public bool TryMerge(int from, int to)
         {
+            ValidateIndex(from);
+            ValidateIndex(to);
             if (from == to) return false;
-            var src = Get(from);
-            var dst = Get(to);
-            if (src.IsEmpty) return false;
 
-            if (dst.IsEmpty)
+            var srcBefore = _slots[from];
+            var dstBefore = _slots[to];
+
+            if (srcBefore.IsEmpty) return false;
+
+            // целевой пуст — просто перенос
+            if (dstBefore.IsEmpty)
             {
-                Set(to, src);
-                Set(from, InventoryItem.Empty);
+                _slots[to] = srcBefore;
+                _slots[from] = InventoryItem.Empty;
+                OnChanged(to);
+                OnChanged(from);
+                return true;
+            }
+
+            // одинаковый тип и стэкабельно — докладываем в to, остаток в from
+            if (srcBefore.Config == dstBefore.Config && srcBefore.Stackable)
+            {
+                int total = srcBefore.Count + dstBefore.Count;
+                int place = Math.Min(dstBefore.MaxStack, total);
+                int remainder = total - place;
+                
+                var newDst = new InventoryItem(dstBefore.Config, place);
+                var newSrc = remainder > 0
+                    ? new InventoryItem(srcBefore.Config, remainder)   // возврат остатка
+                    : InventoryItem.Empty;
+
+                _slots[to] = newDst;
+                _slots[from] = newSrc;
+
+                OnChanged(to);
+                OnChanged(from);
                 return true;
             }
             
-            if (src.Config == dst.Config && src.Stackable)
-            {
-                int total = src.Count + dst.Count;
-                int canPlace = Math.Min(dst.MaxStack, total);
-                int remainder = total - canPlace;
-                Set(to, new InventoryItem(dst.Config, canPlace));
-                Set(from, remainder > 0 ? new InventoryItem(src.Config, remainder) : InventoryItem.Empty);
-                return true;
-            }
             return false;
-        }
-
-        public void TryMergeInternal(InventoryItem dragging, int targetIndex)
-        {
-            var dst = Get(targetIndex);
-            if (dst.IsEmpty || dst.Config != dragging.Config || !dst.Stackable) return;
-
-            int total = dragging.Count + dst.Count;
-            int canPlace = Math.Min(dst.MaxStack, total);
-            int remainder = total - canPlace;
-
-            Set(targetIndex, new InventoryItem(dst.Config, canPlace));
-
-            if (remainder > 0)
-            {
-                for (int i = 0; i < SlotCount; i++)
-                {
-                    if (Get(i).IsEmpty)
-                    {
-                        Set(i, new InventoryItem(dragging.Config, remainder));
-                        return;
-                    }
-                }
-            }
         }
         
         public bool UseAt(int index)
@@ -120,6 +96,14 @@ namespace Core
             return true;
         }
         
-        public void RemoveAt(int index) => Set(index, InventoryItem.Empty);
+        
+        private void ValidateIndex(int index)
+        {
+            if (index < 0 || index >= _slots.Length)
+                throw new ArgumentOutOfRangeException(nameof(index), 
+                    $"Index {index} is out of range [0..{_slots.Length - 1}]");
+        }
+        
+        private void OnChanged(int index) => OnSlotChanged?.Invoke(index);
     }
 }
