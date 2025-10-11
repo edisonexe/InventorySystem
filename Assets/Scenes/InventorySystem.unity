@@ -548,6 +548,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1339380480153750037, guid: 54ab140c320ca50468e3077880dd6a6c, type: 3}
+      propertyPath: _width
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1339380480153750037, guid: 54ab140c320ca50468e3077880dd6a6c, type: 3}
       propertyPath: _gridView
       value: 
       objectReference: {fileID: 483711912}

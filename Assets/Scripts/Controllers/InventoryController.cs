@@ -13,12 +13,13 @@ namespace Controllers
         [SerializeField] private int _randomItems = 12;
         [SerializeField] private int _maxInitialStack = 20;
         
-        private int _width = 5;
-        private int _height = 4;
+        [SerializeField] private int _width = 5;
+        [SerializeField] private int _height = 4;
         private System.Random _rng;
         private InventoryItem _draggingItem;
         public InventoryModel Model {get; private set;}
         public int draggingFrom = -1;
+        public int Width => _width;
         
         private void Awake()
         {

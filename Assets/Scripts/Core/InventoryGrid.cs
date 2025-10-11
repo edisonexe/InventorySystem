@@ -1,4 +1,5 @@
-﻿using Controllers;
+﻿using System;
+using Controllers;
 using Core.Input;
 using UI;
 using UnityEngine;
@@ -20,11 +21,20 @@ namespace Core
         
         private InventoryController _controller;
         private SlotView[] _views;
+        private GridLayoutGroup _gridLayout;
         
         public DragIcon DragIcon => _dragIcon;
         public TooltipView Tooltip => _tooltip;
-        public InventoryController Controller => _controller;  
-        
+        public InventoryController Controller => _controller;
+
+        private void Awake() => _gridLayout = GetComponent<GridLayoutGroup>();
+
+        private void Start()
+        {
+            _gridLayout.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
+            _gridLayout.constraintCount = _controller.Width;
+        }
+
         public void Build(InventoryController controller, int w, int h)
         {
             _controller = controller;
