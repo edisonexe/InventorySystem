@@ -10,6 +10,7 @@ namespace UI
         [SerializeField] private TMP_Text _title;
         [SerializeField] private TMP_Text _type;
         [SerializeField] private TMP_Text _desc;
+        [SerializeField] private Vector2 _offset = new Vector2(300, 0);
 
         private void Awake() => gameObject.SetActive(false);
 
@@ -24,7 +25,7 @@ namespace UI
             RectTransformUtility.ScreenPointToLocalPointInRectangle(canvas.transform as RectTransform, 
                 RectTransformUtility.WorldToScreenPoint(canvas.worldCamera, anchor.position), 
                 canvas.worldCamera, out var local);
-            _root.anchoredPosition = local + new Vector2(300, 0);
+            _root.anchoredPosition = local + _offset;
         }
 
         public void Hide() => _root.gameObject.SetActive(false);
